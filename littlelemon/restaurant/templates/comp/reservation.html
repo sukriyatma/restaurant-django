@@ -1,0 +1,50 @@
+<div class=".site-content">
+    <main>
+        <div>
+            <h1 style="font-weight: 600;">Make a reservation</h1>
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Reserve</button>
+            </form>
+        </div>
+        <div>
+            
+        </div>
+    </main>
+</div>
+
+<script>
+    const date = document.getElementById("id_date")
+    const idTime = document.querySelectorAll('#id_time')
+
+    const getBooked = async () => {
+        return (await fetch('/bookings?date=' + date.value)
+        .then(res=>res.json())
+        .catch(e=>console.error(e)))
+    }
+
+    const setListBooked = () => {
+        
+    }
+
+    date.addEventListener('change', (e)=> {
+    
+        getBooked().then(res=> {
+            const timeBooked = []
+            res.forEach(b=> timeBooked.push(b.fields.time))
+            for (let opt of idTime[0]) {
+                if (timeBooked.includes(opt.innerHTML)) {
+                    opt.disabled=true                   
+                } else {
+                    opt.disabled=false
+                }
+            }
+            
+        }).catch(console.error)
+    
+    })
+
+
+
+</script>
